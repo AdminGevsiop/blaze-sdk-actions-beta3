@@ -35,37 +35,51 @@ function TabPanel(props) {
 
 const rows = [
   {
-      _id:1,
+      _id: 1,
+      name: "there are some regions without Hours of Operations (list)",
+      module: "region",
+      actionType: "Automatic",
+      field: "list",
+      formInputs: [
+          {
+              recomendatio: "recomendation 1"
+          },
+          {
+              recomendatio: "recomendation 2"
+          },
+          {
+              recomendatio: "recomendation 3"
+          }
+      ]
+  },
+  {
+      _id: 2,
+      name: "there are some regions without Hours of Operations (options)",
+      module: "region",
+      actionType: "Automatic",
+      field: "Select",
+      options:[{ id: "", name: "region1" }, { id: "", name: "region2" }, { id: "", name: "region3" }]
+  },
+  {
+      _id: 3,
       name: "there are some regions without Hours of Operations",
       module: "region",
       actionType: "Automatic",
   },
   {
-      _id:2,
+      _id: 4,
       name: "there are some regions without Hours of Operations",
       module: "region",
       actionType: "Automatic",
   },
   {
-      _id:3,
+      _id: 5,
       name: "there are some regions without Hours of Operations",
       module: "region",
       actionType: "Automatic",
   },
   {
-      _id:4,
-      name: "there are some regions without Hours of Operations",
-      module: "region",
-      actionType: "Automatic",
-  },
-  {
-      _id:5,
-      name: "there are some regions without Hours of Operations",
-      module: "region",
-      actionType: "Automatic",
-  },
-  {
-      _id:6,
+      _id: 6,
       name: "there are some regions without Hours of Operations",
       module: "region",
       actionType: "Automatic",

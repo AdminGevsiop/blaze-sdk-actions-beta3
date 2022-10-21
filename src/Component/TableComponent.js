@@ -30,6 +30,7 @@ export const TableComponent = (props) => {
   const [openDialogSeeLater, setOpenDialogSeeLater] = React.useState(false);
   const [openDialogIgnore, setOpenDialogIgnore] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
+  const [item, setItem] = React.useState({});
   const classes = useStyles();
 
   const onClickDialogSeeLater = () => {
@@ -47,8 +48,9 @@ export const TableComponent = (props) => {
   const handleCloseDialogIgnore = () => {
     setOpenDialogIgnore(false);
   };
-
-  const handleOpenModal = () => {
+ 
+  const handleOpenModal = (item) => {
+    setItem(item)
     setOpenModal(true);
   };
 
@@ -86,7 +88,7 @@ export const TableComponent = (props) => {
                 <TableCell align="right">{row.module}</TableCell>
                 <TableCell align="right">{row.actionType}</TableCell>
                 <TableCell align="right">
-                  <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }} onClick={handleOpenModal}> View </Button>
+                  <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }} onClick={() => {handleOpenModal(row)}}> View </Button>
                   <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'orange', color: 'orange' }} onClick={onClickDialogSeeLater}> See Later </Button>
                   <Button variant="outlined" onClick={onClickDialogIgnore}> Ignore </Button>
                 </TableCell>
@@ -112,6 +114,8 @@ export const TableComponent = (props) => {
 
       <ModalDetail
         open={openModal}
+        handleClose={handleCloseModal}
+        item={item}
       />
 
     </Paper>
