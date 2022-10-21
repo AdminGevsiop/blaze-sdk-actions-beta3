@@ -1,3 +1,35 @@
 body {
   margin: 0px !important;
 }
+
+.container {
+  min-height: 45rem;
+}
+
+.card-nav {
+  margin: 5px 0px;
+  padding: 10px 20px;
+}
+
+.card-title {
+  background-color: #EB8D48 !important;
+  margin: 5px 0px;
+  padding: 10px 20px;
+}
+
+.card-title .{
+  color: 'white';
+}
+
+.group-button {
+  margin: 10px 300px;
+}
+
+.group-button-bar {
+  background: '#1cc4e8' !important;
+}
+
+.table {
+  margin: 5px 100px 10px 100px;
+}
+
