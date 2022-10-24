@@ -92,9 +92,9 @@ export const ModalDetail = (props) => {
         </Card>
 
         <Divider />
-        <Box className="bottom-buttons">
-          <Button variant="contained" color="primary" style={{ marginRight: 20 }} onClick={prepareAiRecommendation}>Save</Button>
-          <Button variant="contained" color="secondary" onClick={handleClose}>Cancel</Button>
+        <Box style={{justifyContent:"end", display:"flex"}}>
+          <Button variant="contained" color="secondary" onClick={handleClose}>Close</Button>
+          <Button variant="contained" color="primary" style={{ marginLeft: 10 }} onClick={(e) => { }}>Continue</Button>
         </Box>
       </Card>
     </Modal>

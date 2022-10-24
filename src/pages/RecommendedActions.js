@@ -117,16 +117,9 @@ const RecommendedActions = (props) => {
     }
   }
 
-  return (
-    <Box className='container'>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Card>
-                        <Card className='card-title'>
-                            <Breadcrumbs style={{ color: 'white' }}>
-                                <Typography>Recommendations</Typography>
-                            </Breadcrumbs>
-                        </Card>
+  return (         
+            <Grid item xs={12}>
+                    <Box style={{margin:"10px 80px"}}>
 
                         <Box className='group-button'>
                             <AppBar position="static" color='none'>
@@ -136,15 +129,13 @@ const RecommendedActions = (props) => {
                                     variant="fullWidth"
                                 >
                                     <Tab label="Alert" style={{fontSize: 12}}/>
-                                    <Tab label="App Recommendations" style={{fontSize: 12}}/>
+                                    <Tab label="Config Recommendations" style={{fontSize: 12}}/>
                                     <Tab label="Manage Recommendations" style={{fontSize: 12}}/>
                                 </Tabs>
                             </AppBar>
                         </Box>
-                        <Box style={{ display: "flex", justifyContent: "end", marginRight: 100 }} >
-                            <Button onClick={refreshList} variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }}> 
-                                Refresh 
-                            </Button>
+                        <Box style={{ display: "flex", justifyContent: "end", margin: "10px" }} >
+                            <Button variant="outlined" style={{ borderBlockColor: 'green', color: 'green' }}> Refresh </Button>
                         </Box>
 
                         <Box className='table'>
@@ -186,10 +177,9 @@ const RecommendedActions = (props) => {
                                 />
                             </TabPanel>
                         </Box>
-                    </Card>
-                </Grid>
-            </Grid>
-        </Box>
+                    </Box>
+                    
+            </Grid>    
   );
 };
 
