@@ -94,7 +94,7 @@ export const ModalDetail = (props) => {
         <Divider />
         <Box style={{justifyContent:"end", display:"flex"}}>
           <Button variant="contained" color="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="contained" color="primary" style={{ marginLeft: 10 }} onClick={(e) => { }}>Continue</Button>
+          <Button variant="contained" color="primary" style={{ marginLeft: 10 }} onClick={prepareAiRecommendation}>Continue</Button>
         </Box>
       </Card>
     </Modal>

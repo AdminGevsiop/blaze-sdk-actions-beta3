@@ -135,7 +135,7 @@ const RecommendedActions = (props) => {
                             </AppBar>
                         </Box>
                         <Box style={{ display: "flex", justifyContent: "end", margin: "10px" }} >
-                            <Button variant="outlined" style={{ borderBlockColor: 'green', color: 'green' }}> Refresh </Button>
+                            <Button onClick={refreshList} variant="outlined" style={{ borderBlockColor: 'green', color: 'green' }}> Refresh </Button>
                         </Box>
 
                         <Box className='table'>

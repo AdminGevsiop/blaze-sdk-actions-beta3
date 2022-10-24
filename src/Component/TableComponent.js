@@ -115,8 +115,8 @@ export const TableComponent = (props) => {
         open={openModal}
         handleClose={handleCloseModal}
         runAiRecommendation={(inputValues) => {
-          props.runAiRecommendation(inputValues);
           handleCloseModal();
+          props.runAiRecommendation(inputValues);
         }}
         aiRecommendationCase={props.selectedAiRecommendation && props.selectedAiRecommendation.aiRecommendationCase || {}}
         {...props}
