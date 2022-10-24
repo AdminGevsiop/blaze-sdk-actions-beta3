@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Button, Card, Divider, Grid, makeStyles, MenuItem, Modal, Select, Typography } from '@material-ui/core'
+import { CustomInput } from '../Component/CustomInput';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -13,6 +14,7 @@ function getModalStyle() {
     top: `${top}%`,
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
+    width: "700px"
   };
 }
 
@@ -28,14 +30,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ModalDetail = (props) => {
-  const { open, handleClose, item = {} } = props
+  const { open, handleClose, aiRecommendationCase = {} } = props
   const classes = useStyles();
-  const [modalStyle] = React.useState(getModalStyle);
-  const [age, setAge] = React.useState('');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const [modalStyle] = React.useState(getModalStyle);
+  const [inputValues, setInputValues] = React.useState([]);
+
+  const onSetInputValues = (newValue) => {
+    setInputValues([...inputValues, newValue]);
+  }
+
+  const prepareAiRecommendation = () => {
+    props.runAiRecommendation(inputValues);
+  }
 
   return (
     <Modal
@@ -46,42 +53,47 @@ export const ModalDetail = (props) => {
         <Typography variant="h5">Recommendation</Typography>
         <Divider />
         <Card style={{ margin: '30px 0px', padding: '10px 30px' }}>
-          <Typography variant="h5" gutterBottom >Situation</Typography>
-          <Typography variant="body1" gutterBottom>{item.title}</Typography>
+          <Typography variant="h5" gutterBottom >Event</Typography>
+          <Typography variant="body1" gutterBottom>{aiRecommendationCase.title}</Typography>
 
+          <br />
           <Typography variant="h5" gutterBottom style={{ marginTop: 25 }}>Description</Typography>
-          <Typography variant="body1" gutterBottom>{item.description}</Typography>
+          <Typography variant="body1" gutterBottom>{aiRecommendationCase.description}</Typography>
 
-          <Typography variant="h5" gutterBottom style={{ marginTop: 25 }}>Action</Typography>
+          <br />
+          <Typography variant="h5" gutterBottom style={{ marginTop: 25 }}>Actions to do</Typography>
           {
-            true &&
+            aiRecommendationCase.actions &&
             <ol>
-              {item.actions.map((value) => (
+              {aiRecommendationCase.actions.map((value) => (
                 <li>{value}</li>
               ))}
             </ol>
           }
 
+          <br />
+          <Typography variant="h5" gutterBottom style={{ marginTop: 25 }}>Required info</Typography>
           {
-            item.useForm &&
-            <Grid item xs={12} className="select">
-              <Select
-                labelId="demo-customized-select-label"
-                id="demo-customized-select"
-                value={age}
-                onChange={handleChange}
-              >
-                {item.formInputs.map((value) => (
-                  <MenuItem value={value.valueType}>{value.valueType}</MenuItem>
-                ))}
-              </Select>
-            </Grid>
+            aiRecommendationCase.useForm && aiRecommendationCase.formInputs && (
+              aiRecommendationCase.formInputs.map(input => {
+                return (
+                  <CustomInput 
+                    key={input.order} 
+                    onSetInputValues={(newValue) => onSetInputValues(newValue)}
+                    {...input}
+                    inputKey={input.key}
+                  />
+                )
+              })
+            )
+            
+            
           }
         </Card>
 
         <Divider />
         <Box className="bottom-buttons">
-          <Button variant="contained" color="primary" style={{ marginRight: 20 }} onClick={(e) => { }}>Save</Button>
+          <Button variant="contained" color="primary" style={{ marginRight: 20 }} onClick={prepareAiRecommendation}>Save</Button>
           <Button variant="contained" color="secondary" onClick={handleClose}>Cancel</Button>
         </Box>
       </Card>

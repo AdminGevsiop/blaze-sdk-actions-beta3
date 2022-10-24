@@ -30,7 +30,6 @@ export const TableComponent = (props) => {
   const [openDialogSeeLater, setOpenDialogSeeLater] = React.useState(false);
   const [openDialogIgnore, setOpenDialogIgnore] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
-  const [item, setItem] = React.useState({});
   const classes = useStyles();
 
   const onClickDialogSeeLater = () => {
@@ -49,8 +48,8 @@ export const TableComponent = (props) => {
     setOpenDialogIgnore(false);
   };
  
-  const handleOpenModal = (item) => {
-    setItem(item)
+  const handleOpenModal = (aiRecommendation) => {
+    props.selectAiRecommendation(aiRecommendation);
     setOpenModal(true);
   };
 
@@ -75,7 +74,7 @@ export const TableComponent = (props) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Action</TableCell>
+              <TableCell>Event</TableCell>
               <TableCell align="right">Module</TableCell>
               <TableCell align="right">Action Type</TableCell>
               <TableCell />
@@ -86,9 +85,9 @@ export const TableComponent = (props) => {
               <TableRow key={value.id}>
                 <TableCell component="th" scope="row">{value.aiRecommendationCase.title}</TableCell>
                 <TableCell align="right">{value.aiRecommendationCase.module}</TableCell>
-                <TableCell align="right">{}</TableCell>
+                <TableCell align="right">{value.aiRecommendationCase.useform ? "Form" : "Automatic"}</TableCell>
                 <TableCell align="right">
-                  <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }} onClick={() => {handleOpenModal(value.aiRecommendationCase)}}> View </Button>
+                  <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }} onClick={() => {handleOpenModal(value)}}> View </Button>
                   <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'orange', color: 'orange' }} onClick={onClickDialogSeeLater}> See Later </Button>
                   <Button variant="outlined" onClick={onClickDialogIgnore}> Ignore </Button>
                 </TableCell>
@@ -115,7 +114,12 @@ export const TableComponent = (props) => {
       <ModalDetail
         open={openModal}
         handleClose={handleCloseModal}
-        item={item}
+        runAiRecommendation={(inputValues) => {
+          props.runAiRecommendation(inputValues);
+          handleCloseModal();
+        }}
+        aiRecommendationCase={props.selectedAiRecommendation && props.selectedAiRecommendation.aiRecommendationCase || {}}
+        {...props}
       />
 
     </Paper>

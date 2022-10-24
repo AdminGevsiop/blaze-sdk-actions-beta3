@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   makeStyles,
   withStyles,
   Grid,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import ExampleService from '../services/ExampleService';
+import AiRecommendationService from '../services/AiRecommendationService';
 import * as qs from 'query-string';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const auth = new ExampleService();
+const aiRecommendationService = new AiRecommendationService();
 
 const RecommendedActions = (props) => {
 
@@ -49,30 +49,73 @@ const RecommendedActions = (props) => {
   const history = useHistory();
   const classes = useStyles();
 
-  const [data, setData] = React.useState([]);
-  const [value, setValue] = React.useState(0);
-  const [section, setSection] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [type, setType] = useState(0);
+  const [typeText, setTypeText] = useState("Alert");
+
+  const [aiRecommendations, setAiRecommendations] = useState({
+    active: [],
+    seeLater: [],
+    ignored: []
+  });
+  const [selectedAiRecommendation, setSelectedAiRecommendation] = useState(null);
+
+  React.useEffect(() => {
+    refreshList();
+  }, []);
 
   const handleChange = (event, newValue) => {
       setValue(newValue);
   };
 
-  const handleChangeSection = (event, newValue) => {
-      setSection(newValue);
+  const handleChangeType = (event, newType) => {
+      let newTypeText;
+      switch(newType){
+        case 0: newTypeText = "Alert"; break
+        case 1: newTypeText = "Config"; break
+        case 2: newTypeText = "Manage"; break
+      }
+
+      setType(newType);
+      setTypeText(newTypeText);
   };
 
-
-  React.useEffect(() => {
-
-  }, [token]);
-
-  const exampleFunction = () => {
-    // auth.login(user).then(res => {});
+  const selectAiRecommendation = (value) => {
+    setSelectedAiRecommendation(value ? {...value} : null);
   }
 
-  const activeValues = data.filter(value => value.recommendationStatus === "Active" ) || []
-  const seeLaterValues = data.filter(value => value.recommendationStatus === "SeeLater" ) || []
-  const ignoredValues = data.filter(value => value.recommendationStatus === "Ignored" ) || []
+  const refreshList = () => {
+    aiRecommendationService.refreshList(typeText, 0, 0).then(res => {
+        if(res){
+            const { data } = res;
+            const { values=[] } = data || {};
+
+            const newActiveRecommendations = values.filter(value => value.recommendationStatus == "Active");
+            const newSeeLaterRecommendations = values.filter(value => value.recommendationStatus == "SeeLater");
+            const newIgnoredRecommendations = values.filter(value => value.recommendationStatus == "Ignored");
+
+            setAiRecommendations({
+                active: newActiveRecommendations,
+                seeLater: newSeeLaterRecommendations,
+                ignored: newIgnoredRecommendations
+            });
+        }
+    });
+  }
+
+  const runAiRecommendation = async (inputValues) => {
+    if(selectedAiRecommendation){
+        const body = {
+            aiRecommendationId: selectedAiRecommendation.id,
+            inputValues
+        }
+    
+        await aiRecommendationService.run(body).then(res => {
+            console.log("Done!")
+            window.alert("Done!");
+        })
+    }
+  }
 
   return (
     <Box className='container'>
@@ -88,8 +131,8 @@ const RecommendedActions = (props) => {
                         <Box className='group-button'>
                             <AppBar position="static" color='none'>
                                 <Tabs
-                                    value={section}
-                                    onChange={handleChangeSection}
+                                    value={type}
+                                    onChange={handleChangeType}
                                     variant="fullWidth"
                                 >
                                     <Tab label="Alert" style={{fontSize: 12}}/>
@@ -99,7 +142,9 @@ const RecommendedActions = (props) => {
                             </AppBar>
                         </Box>
                         <Box style={{ display: "flex", justifyContent: "end", marginRight: 100 }} >
-                            <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }}> Refresh </Button>
+                            <Button onClick={refreshList} variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }}> 
+                                Refresh 
+                            </Button>
                         </Box>
 
                         <Box className='table'>
@@ -111,24 +156,33 @@ const RecommendedActions = (props) => {
                                     textColor="inherit"
                                     variant="fullWidth"
                                 >
-                                    <Tab label="All" />
-                                    <Tab label="see Later" />
-                                    <Tab label="Ignored" />
+                                    <Tab label={`Active (${aiRecommendations.active.length})`} />
+                                    <Tab label={`See Later (${aiRecommendations.seeLater.length})`} />
+                                    <Tab label={`Ignored (${aiRecommendations.ignored.length})`} />
                                 </Tabs>
                             </AppBar>
                             <TabPanel value={value} index={0}>
                                 <TableComponent
-                                    rows={activeValues}
+                                    rows={aiRecommendations.active}
+                                    selectAiRecommendation={(value) => { selectAiRecommendation(value) }}
+                                    selectedAiRecommendation={selectedAiRecommendation}
+                                    runAiRecommendation={(inputValues) => { runAiRecommendation(inputValues) }}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <TableComponent
-                                    rows={seeLaterValues}
+                                    rows={aiRecommendations.seeLater}
+                                    selectAiRecommendation={(value) => { selectAiRecommendation(value) }}
+                                    selectedAiRecommendation={selectedAiRecommendation}
+                                    runAiRecommendation={(inputValues) => { runAiRecommendation(inputValues) }}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={2}>
                                 <TableComponent
-                                    rows={ignoredValues}
+                                    rows={aiRecommendations.ignored}
+                                    selectAiRecommendation={(value) => { selectAiRecommendation(value) }}
+                                    selectedAiRecommendation={selectedAiRecommendation}
+                                    runAiRecommendation={(inputValues) => { runAiRecommendation(inputValues) }}
                                 />
                             </TabPanel>
                         </Box>
