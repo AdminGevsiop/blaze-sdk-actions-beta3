@@ -82,13 +82,13 @@ export const TableComponent = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row._id}>
-                <TableCell component="th" scope="row">{row.name}</TableCell>
-                <TableCell align="right">{row.module}</TableCell>
-                <TableCell align="right">{row.actionType}</TableCell>
+            {rows.map((value) => (
+              <TableRow key={value.id}>
+                <TableCell component="th" scope="row">{value.aiRecommendationCase.title}</TableCell>
+                <TableCell align="right">{value.aiRecommendationCase.module}</TableCell>
+                <TableCell align="right">{}</TableCell>
                 <TableCell align="right">
-                  <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }} onClick={() => {handleOpenModal(row)}}> View </Button>
+                  <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'green', color: 'green' }} onClick={() => {handleOpenModal(value.aiRecommendationCase)}}> View </Button>
                   <Button variant="outlined" style={{ marginRight: 10, borderBlockColor: 'orange', color: 'orange' }} onClick={onClickDialogSeeLater}> See Later </Button>
                   <Button variant="outlined" onClick={onClickDialogIgnore}> Ignore </Button>
                 </TableCell>

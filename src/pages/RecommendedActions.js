@@ -33,83 +33,6 @@ function TabPanel(props) {
   );
 }
 
-const rows = [
-  {
-      _id: 1,
-      name: "there are some regions without Hours of Operations (list)",
-      module: "region",
-      actionType: "Automatic",
-      field: "list",
-      formInputs: [
-          {
-              recomendatio: "recomendation 1"
-          },
-          {
-              recomendatio: "recomendation 2"
-          },
-          {
-              recomendatio: "recomendation 3"
-          }
-      ]
-  },
-  {
-      _id: 2,
-      name: "there are some regions without Hours of Operations (options)",
-      module: "region",
-      actionType: "Automatic",
-      field: "Select",
-      options:[{ id: "", name: "region1" }, { id: "", name: "region2" }, { id: "", name: "region3" }]
-  },
-  {
-      _id: 3,
-      name: "there are some regions without Hours of Operations",
-      module: "region",
-      actionType: "Automatic",
-  },
-  {
-      _id: 4,
-      name: "there are some regions without Hours of Operations",
-      module: "region",
-      actionType: "Automatic",
-  },
-  {
-      _id: 5,
-      name: "there are some regions without Hours of Operations",
-      module: "region",
-      actionType: "Automatic",
-  },
-  {
-      _id: 6,
-      name: "there are some regions without Hours of Operations",
-      module: "region",
-      actionType: "Automatic",
-  }
-];
-
-const rows2 = [
-  {
-      _id:1,
-      name: "there are some regions without Hours of Operations 1",
-      module: "region",
-      actionType: "Automatic",
-  },
-  {
-      _id:2,
-      name: "there are some regions without Hours of Operations 1",
-      module: "region",
-      actionType: "Automatic",
-  }
-];
-
-const rows3 = [
-  {
-      _id:1,
-      name: "there are some regions without Hours of Operations 2",
-      module: "region",
-      actionType: "Automatic",
-  }
-];
-
 const useStyles = makeStyles(theme => ({
   example: {
 
@@ -126,6 +49,7 @@ const RecommendedActions = (props) => {
   const history = useHistory();
   const classes = useStyles();
 
+  const [data, setData] = React.useState([]);
   const [value, setValue] = React.useState(0);
   const [section, setSection] = React.useState(0);
 
@@ -145,6 +69,10 @@ const RecommendedActions = (props) => {
   const exampleFunction = () => {
     // auth.login(user).then(res => {});
   }
+
+  const activeValues = data.filter(value => value.recommendationStatus === "Active" ) || []
+  const seeLaterValues = data.filter(value => value.recommendationStatus === "SeeLater" ) || []
+  const ignoredValues = data.filter(value => value.recommendationStatus === "Ignored" ) || []
 
   return (
     <Box className='container'>
@@ -190,17 +118,17 @@ const RecommendedActions = (props) => {
                             </AppBar>
                             <TabPanel value={value} index={0}>
                                 <TableComponent
-                                    rows={rows}
+                                    rows={activeValues}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <TableComponent
-                                    rows={rows2}
+                                    rows={seeLaterValues}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={2}>
                                 <TableComponent
-                                    rows={rows3}
+                                    rows={ignoredValues}
                                 />
                             </TabPanel>
                         </Box>

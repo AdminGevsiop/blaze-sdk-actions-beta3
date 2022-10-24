@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Card, Divider, Grid, List, ListItem, ListItemText, makeStyles, MenuItem, Modal, Select, Typography } from '@material-ui/core'
+import { Box, Button, Card, Divider, Grid, makeStyles, MenuItem, Modal, Select, Typography } from '@material-ui/core'
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ModalDetail = (props) => {
-  const { open, handleClose, item } = props
+  const { open, handleClose, item = {} } = props
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [age, setAge] = React.useState('');
@@ -47,24 +47,23 @@ export const ModalDetail = (props) => {
         <Divider />
         <Card style={{ margin: '30px 0px', padding: '10px 30px' }}>
           <Typography variant="h5" gutterBottom >Situation</Typography>
-          <Typography variant="body1" gutterBottom>{item.name}</Typography>
+          <Typography variant="body1" gutterBottom>{item.title}</Typography>
+
+          <Typography variant="h5" gutterBottom style={{ marginTop: 25 }}>Description</Typography>
+          <Typography variant="body1" gutterBottom>{item.description}</Typography>
 
           <Typography variant="h5" gutterBottom style={{ marginTop: 25 }}>Action</Typography>
           {
-            item && item.field === "list" &&
-            <List >
-              {item.formInputs.map((value) => (
-                <ListItem>
-                  <ListItemText
-                    primary={value.recomendatio}
-                  />
-                </ListItem>
+            true &&
+            <ol>
+              {item.actions.map((value) => (
+                <li>{value}</li>
               ))}
-            </List>
+            </ol>
           }
 
           {
-            item && item.field === "Select" &&
+            item.useForm &&
             <Grid item xs={12} className="select">
               <Select
                 labelId="demo-customized-select-label"
@@ -72,8 +71,8 @@ export const ModalDetail = (props) => {
                 value={age}
                 onChange={handleChange}
               >
-                {item.options.map((value) => (
-                  <MenuItem value={value.name}>{value.name}</MenuItem>
+                {item.formInputs.map((value) => (
+                  <MenuItem value={value.valueType}>{value.valueType}</MenuItem>
                 ))}
               </Select>
             </Grid>
